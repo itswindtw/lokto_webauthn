@@ -2,6 +2,8 @@
 
 (name aiyu_webauthn)
 
+(generate_opam_files true)
+
 (package
   (name aiyu_webauthn)
   (depends
@@ -12,8 +14,10 @@
     mirage-crypto-rng
     x509
     aiyu_cbor
-    hex
-    (alcotest :with-test)))
+    (hex :with-test)
+    (alcotest :with-test)
+    (ocaml-lsp-server :with-dev-setup)
+    (ocamlformat :with-dev-setup)))
 
 (pin
   (url "git+https://github.com/itswindtw/aiyu_cbor")
