@@ -4,11 +4,10 @@ let user_store = Hashtbl.create 10
 let credential_store = Hashtbl.create 10
 
 (* Shared *)
-let rp_id = "localhost"
 let allow_cross_origin = false
 let require_user_verification = false
 
-let check_origin origin =
+let check_origin ~rp_id origin =
   match Uri.of_string origin |> Uri.host with
   | Some host -> host = rp_id
   | _ -> false
@@ -50,7 +49,15 @@ let extensions =
     ]
 
 let () =
-  Dream.run @@ Dream.logger @@ Dream.memory_sessions
+  let port = Sys.getenv_opt "PORT" |> Option.map int_of_string in
+  let rp_id =
+    Sys.getenv_opt "RENDER_EXTERNAL_HOSTNAME"
+    |> Option.value ~default:"localhost"
+  in
+  let check_origin = check_origin ~rp_id in
+
+  Dream.run ~interface:"0.0.0.0" ?port
+  @@ Dream.logger @@ Dream.memory_sessions
   @@ Dream.router
        [
          Dream.get "/" (fun _ ->

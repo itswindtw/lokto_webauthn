@@ -8,3 +8,7 @@
     dream
     crunch
     uuidm))
+(pin
+  (url "git+https://github.com/itswindtw/lokto_webauthn")
+  (package
+    (name lokto_webauthn)))
